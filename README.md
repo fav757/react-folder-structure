@@ -165,3 +165,94 @@ Enforce import boundaries via ESLint rules or Nx module boundaries.
 | infra     | SDK wrappers, external integration   | ❌            | sentry.ts, i18n.ts, wsClient.ts  |
 
 This architecture provides a consistent, maintainable, and scalable pattern for frontend applications.
+
+## Example
+```
+my-monorepo/
+├── apps/
+│   └── shop/                      # Application entry point for "shop"
+│       └── src/
+│           ├── main.tsx         # Main entry point
+│           └── App.tsx          # Root component (e.g., includes routing)
+│
+└── libs/
+    └── shop/
+        ├── features/            # UI use-case features (smart components)
+        │   └── ProductList/     
+        │       ├── components/  # Feature child components
+        │       │   ├── ProductItem
+        │       │   └── ProductListContainer
+        │       ├── hooks/       # Feature-specific hooks
+        │       │   └── useProductList.ts
+        │       ├── helpers/     # Display helpers (non-domain logic)
+        │       │   └── formatProductPrice.ts
+        │       ├── types/       # Feature-specific TypeScript types
+        │       │   └── product.types.ts
+        │       ├── ProductList.tsx  # Root feature smart component
+        │       └── index.ts         # Public export for the feature
+        │
+        ├── entities/            # Domain logic (business rules), by domain
+        │   ├── product/         # Domain: Product
+        │   │   ├── model/       # Domain models, types, invariants
+        │   │   │   └── product.model.ts
+        │   │   ├── api/         # API services or fetchers for products
+        │   │   │   └── product.api.ts
+        │   │   ├── state/       # Global state management (Redux/Zustand slice)
+        │   │   │   └── product.slice.ts
+        │   │   ├── helpers/     # Business rule helpers (e.g., display formatting)
+        │   │   │   └── getProductDisplayName.ts
+        │   │   ├── data-sources/ # Data source interfaces or abstractions
+        │   │   │   └── product-data-source.ts
+        │   │   └── hooks/       # Domain-specific data fetching hooks (no extra logic)
+        │   │       └── useLoadProductsQuery.ts
+        │   ├── user/            # Domain: User
+        │   │   ├── model/
+        │   │   │   └── user.model.ts
+        │   │   ├── api/
+        │   │   │   └── user.api.ts
+        │   │   ├── state/
+        │   │   │   └── user.slice.ts
+        │   │   └── helpers/
+        │   │       └── getUserFullName.ts
+        │   └── order/           # Domain: Order (as an example)
+        │       ├── model/
+        │       │   └── order.model.ts
+        │       ├── api/
+        │       │   └── createOrder.ts
+        │       ├── state/
+        │       │   └── order.slice.ts
+        │       └── helpers/
+        │           └── calculateOrderTotal.ts
+        │
+        ├── ui/                  # App UI-kit (domain-independent presentational components)
+        │   ├── Button.tsx
+        │   ├── Card.tsx
+        │   └── Modal/
+        │       ├── components/
+        │       │   └── ModalHeader.tsx
+        │       ├── Modal.tsx 
+        │       ├── Modal.css
+        │       └── index.ts
+        │
+        ├── util/                # Generic, non-domain utilities
+        │   ├── hooks/           # e.g., useMediaQuery.ts
+        │   │   └── useMediaQuery.ts
+        │   ├── helpers/         # e.g., formatDate.ts
+        │   │   └── formatDate.ts
+        │   ├── services/        # e.g., BrowserStorageService.ts
+        │   │   └── BrowserStorageService.ts
+        │   └── constants/       # Global configuration values
+        │       └── dateFormats.ts
+        │
+        └── infra/               # External integrations (no business logic)
+            ├── logging/         # Logging service wrappers (e.g., Sentry)
+            │   └── LoggingService.ts
+            ├── analytics/       # Analytics service wrappers (e.g., Amplitude)
+            │   └── AnalyticsService.ts
+            ├── i18n/            # Internationalization configurations
+            │   └── TranslationService.ts
+            ├── web-socket/      # WebSocket client wrappers
+            │   └── WebSocketClient.ts
+            └── api-clients/     # Auto-generated or custom API client wrappers
+                └── SwaggerClient.ts
+```
