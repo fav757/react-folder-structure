@@ -50,7 +50,7 @@ features/ProductList/
   - `api/`: API services or fetchers
   - `state/`: Zustand/Redux logic or slices
   - `helpers/`: business-rule-related helpers
-  - `hooks/`: reusable hooks to access the data which **don't** perform any logic expect requesting/sending the data.
+  - `hooks/`: reusable hooks to access the data which **don't** perform any logic except requesting/sending the data.
   - `schemas/`: validation schemas (like zod or yup) for domain entities.
   - `data-sources/`: data source-like objects.
 
@@ -70,7 +70,7 @@ entities/product/
 - Ui-kit of the app.
 - Domain independent.
 - Don't have an access to external data sources (api, global state)
-- May have nested components (mostly for code spliting)
+- May have nested components (mostly for code splitting)
 
 ```
 ui/Modal/
@@ -160,13 +160,13 @@ Enforce import boundaries via ESLint rules or Nx module boundaries.
 |-----------|--------------------------------------|----------------|----------------------------------|
 | features  | UI use-cases                         | ❌            | ProductList, Checkout            |
 | entities  | Business logic per domain            | ✅            | product/api/, user/helpers/      |
-| ui        | App ui-kit                           | ❌            | Button, Card, Modal              |
+| ui        | App UI-kit                           | ❌            | Button, Card, Modal              |
 | util      | Generic reusable helpers/hooks       | ❌            | useMediaQuery, formatDate        |
 | infra     | SDK wrappers, external integration   | ❌            | sentry.ts, i18n.ts, wsClient.ts  |
 
 This architecture provides a consistent, maintainable, and scalable pattern for frontend applications.
 
-## Example
+## 📋 Example
 ```
 my-monorepo/
 ├── apps/
@@ -192,16 +192,16 @@ my-monorepo/
         │       └── index.ts         # Public export for the feature
         │
         ├── entities/            # Domain logic (business rules), by domain
-        │   ├── product/         # Domain: Product
+        │   ├── product/
         │   │   ├── model/       # Domain models, types, invariants
         │   │   │   └── product.model.ts
         │   │   ├── api/         # API services or fetchers for products
         │   │   │   └── product.api.ts
-        │   │   ├── state/       # Global state management (Redux/Zustand slice)
+        │   │   ├── state/       # Global state management (Redux slice /Zustand store)
         │   │   │   └── product.slice.ts
-        │   │   ├── helpers/     # Business rule helpers (e.g., display formatting)
+        │   │   ├── helpers/     # Business rule helpers
         │   │   │   └── getProductDisplayName.ts
-        │   │   ├── data-sources/ # Data source interfaces or abstractions
+        │   │   ├── data-sources/
         │   │   │   └── product-data-source.ts
         │   │   └── hooks/       # Domain-specific data fetching hooks (no extra logic)
         │   │       └── useLoadProductsQuery.ts
@@ -214,7 +214,7 @@ my-monorepo/
         │   │   │   └── user.slice.ts
         │   │   └── helpers/
         │   │       └── getUserFullName.ts
-        │   └── order/           # Domain: Order (as an example)
+        │   └── order/
         │       ├── model/
         │       │   └── order.model.ts
         │       ├── api/
@@ -224,7 +224,7 @@ my-monorepo/
         │       └── helpers/
         │           └── calculateOrderTotal.ts
         │
-        ├── ui/                  # App UI-kit (domain-independent presentational components)
+        ├── ui/                  # App UI-kit
         │   ├── Button.tsx
         │   ├── Card.tsx
         │   └── Modal/
@@ -235,13 +235,13 @@ my-monorepo/
         │       └── index.ts
         │
         ├── util/                # Generic, non-domain utilities
-        │   ├── hooks/           # e.g., useMediaQuery.ts
+        │   ├── hooks/
         │   │   └── useMediaQuery.ts
-        │   ├── helpers/         # e.g., formatDate.ts
+        │   ├── helpers/
         │   │   └── formatDate.ts
-        │   ├── services/        # e.g., BrowserStorageService.ts
+        │   ├── services/
         │   │   └── BrowserStorageService.ts
-        │   └── constants/       # Global configuration values
+        │   └── constants/
         │       └── dateFormats.ts
         │
         └── infra/               # External integrations (no business logic)
